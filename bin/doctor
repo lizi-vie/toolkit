@@ -80,6 +80,12 @@ function check_dependencies() {
       perl -e 'print $];'
     elif [[ "openssl" == "$binary_name" ]]; then
       openssl version
+    elif [[ "realpath" == "$binary_name" ]]; then
+      if realpath --version > /dev/null 2>&1; then
+        realpath --version | head -n 1
+      else
+        echo "$(command -v realpath) (version flag unsupported)"
+      fi
     elif [[ "awk" == "$binary_name" ]]; then
       if awk -Wversion > /dev/null 2>&1; then
         awk -Wversion 2>&1 | head -n 1

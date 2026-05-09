@@ -7,6 +7,10 @@ function read_config() {
   # shellcheck source=/dev/null
   source "$TOOLKIT_ROOT/config/overleaf.rc"
 
+  if [[ -n ${DOCKER_DEFAULT_PLATFORM:-} ]]; then
+    export DOCKER_DEFAULT_PLATFORM
+  fi
+
   if [[ $SERVER_PRO != "true" || $IMAGE_VERSION_MAJOR -lt 4 ]]; then
     # Force git bridge to be disabled if not ServerPro >= 4
     GIT_BRIDGE_ENABLED=false
@@ -217,11 +221,11 @@ function check_sharelatex_env_vars() {
 function read_variable() {
   local name=$1
   grep -E "^$name=" "$TOOLKIT_ROOT/config/variables.env" \
-  | sed -r "s/^$name=([\"']?)(.+)\1\$/\2/"
+  | sed -r "s/^$name=['\"]?(.*)['\"]?$/\1/"
 }
 
 function read_configuration() {
   local name=$1
   grep -E "^$name=" "$TOOLKIT_ROOT/config/overleaf.rc" \
-  | sed -r "s/^$name=([\"']?)(.+)\1\$/\2/"
+  | sed -r "s/^$name=['\"]?(.*)['\"]?$/\1/"
 }
